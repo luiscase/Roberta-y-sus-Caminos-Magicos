@@ -1,0 +1,174 @@
+<!DOCTYPE html> 
+<html> 
+    <head> 
+        <meta name="viewport" content="width=device-width, initial-scale=1" /> 
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <title>Mi Primer WebAR con MindAR</title> 
+        <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+         <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+
+<!--Detectar Marcador1 y reproducir video-->
+
+<script>
+AFRAME.registerComponent('video-controller01', {
+  init: function () {
+    const videoEl = document.querySelector('#Video01');
+
+    this.el.addEventListener('targetFound', event => {
+      console.log('Target found - playing video');
+      videoEl.play();
+    });
+
+    this.el.addEventListener('targetLost', event => {
+      console.log('Target lost - pausing video');
+      videoEl.pause();
+    });
+  }
+});
+</script>
+
+<!--Detectar Marcador2 y reproducir video-->
+
+<script>
+AFRAME.registerComponent('video-controller02', {
+  init: function () {
+    const videoE2 = document.querySelector('#Video02');
+
+    this.el.addEventListener('targetFound', event => {
+      console.log('Target found - playing video');
+      videoE2.play();
+    });
+
+    this.el.addEventListener('targetLost', event => {
+      console.log('Target lost - pausing video');
+      videoE2.pause();
+    });
+  }
+});
+</script>
+
+
+<style>
+        /* Estilos para la ventana de inicio */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(18, 18, 18, 0.95); /* Fondo oscuro */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999; /* Asegura que esté por encima de la escena 3D */
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: opacity 0.5s ease; /* Efecto de desaparición suave */
+        }
+
+        .splash-content {
+            text-align: center;
+            padding: 20px;
+        }
+
+        #start-button {
+            background-color: #ff4757;
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        #start-button:hover {
+            background-color: #ff6b81;
+            transform: scale(1.05);
+        }
+
+        /* Ocultar la interfaz nativa de A-Frame temporalmente si es necesario */
+        .a-enter-vr {
+            display: none !important;
+        }
+    </style>
+
+           
+    </head> 
+    <body> 
+
+
+    <!-- 1. VENTANA DE INICIO (SPLASH WINDOW) -->
+    <div id="splash-screen">
+        <div class="splash-content">
+            <h1>Bienvenido a la Experiencia AR</h1>
+            <p>Por favor, permite el acceso a la cámara cuando se te solicite.</p>
+            <button id="start-button">ENTRAR</button>
+        </div>
+    </div>
+
+
+<a-scene 
+    mindar-image="imageTargetSrc: ./targets/targets.mind;" 
+    filterMinCF: 0.0001; filterBeta: 0.001;
+    > 
+
+    
+    
+<a-assets>
+
+    <video id="Video01" src="videos/video01.mp4" preload="auto" loop="true" playsinline webkit-playsinline></video>
+    <video id="Video02" src="videos/video02.mp4" preload="auto" loop="true" playsinline webkit-playsinline></video>
+    <video id="Video03" src="videos/video03.mp4" preload="auto" loop="true" playsinline webkit-playsinline></video>
+  </a-assets>
+
+<a-camera position="0 0 0" look-controls="enabled: false"></a-camera> 
+
+<a-entity video-controller01="" mindar-image-target="targetIndex: 0"> 
+    <a-video src="#Video01" width="1" height="1" rotation="" position="0 0 0" material="side: front" geometry=""></a-video> 
+
+</a-entity>
+
+<a-entity video-controller02="" mindar-image-target="targetIndex: 1"> 
+    <a-video src="#Video02" width="1" height="1" rotation="" position="0 0 0" material="side: front" geometry=""></a-video> 
+</a-entity>
+
+<a-entity video-controller03="" mindar-image-target="targetIndex: 1"> 
+    <a-video src="#Video03" width="1" height="1" rotation="" position="0 0 0" material="side: front" geometry=""></a-video> 
+</a-entity>
+
+</a-scene> 
+
+<!-- 3. JAVASCRIPT PARA CONTROLAR LA INTERFAZ -->
+    <script>
+        const splash = document.getElementById('splash-screen');
+        const startButton = document.getElementById('start-button');
+        const scene = document.querySelector('a-scene');
+
+        // Pausar la escena al cargar la página para ahorrar recursos antes del click
+        scene.pause();
+
+        startButton.addEventListener('click', () => {
+            // 1. Reanudar la escena de A-Frame (activa cámara/sensores)
+            scene.play();
+
+            // 2. Desvanecer la pantalla de inicio
+            splash.style.opacity = 0;
+
+            // 3. Eliminar por completo el div del DOM después de la animación para que no interfiera con los clicks en AR
+            setTimeout(() => {
+                splash.remove();
+                
+                // Volver a mostrar el botón nativo de entrar a VR/AR si lo necesitas
+                const vrButton = document.querySelector('.a-enter-vr');
+                if (vrButton) vrButton.style.display = 'block';
+            }, 500); 
+        });
+    </script>
+
+
+</body> 
+</html>
