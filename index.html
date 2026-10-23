@@ -48,6 +48,8 @@ AFRAME.registerComponent('video-controller02', {
 </script>
 
 
+
+
 <style>
         /* Estilos para la ventana de inicio */
         #splash-screen {
@@ -127,17 +129,17 @@ AFRAME.registerComponent('video-controller02', {
 
 <a-camera position="0 0 0" look-controls="enabled: false"></a-camera> 
 
-<a-entity video-controller01="" mindar-image-target="targetIndex: 0"> 
+<a-entity video-controller01="" mindar-image-target="targetIndex: 1"> 
     <a-video src="#Video01" width="1" height="1" rotation="" position="0 0 0" material="side: front" geometry=""></a-video> 
 
 </a-entity>
 
-<a-entity video-controller02="" mindar-image-target="targetIndex: 1"> 
+<a-entity video-controller02="" mindar-image-target="targetIndex: 0"> 
     <a-video src="#Video02" width="1" height="1" rotation="" position="0 0 0" material="side: front" geometry=""></a-video> 
 </a-entity>
 
-<a-entity video-controller03="" mindar-image-target="targetIndex: 1"> 
-    <a-video src="#Video03" width="1" height="1" rotation="" position="0 0 0" material="side: front" geometry=""></a-video> 
+<a-entity video-controller02="" mindar-image-target="targetIndex: 3"> 
+    <a-video src="#Video02" width="1" height="1" rotation="" position="0 0 0" material="side: front" geometry=""></a-video> 
 </a-entity>
 
 </a-scene> 
