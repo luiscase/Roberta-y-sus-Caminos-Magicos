@@ -47,24 +47,66 @@ AFRAME.registerComponent('video-controller02', {
 });
 </script>
 
-<script>
-window.addEventListener("orientationchange", () => {
-    // Pequeño delay para dejar que el navegador termine de rotar el Viewport
-    setTimeout(() => {
-        if (APP && APP.a-scene) {
-            // Fuerza a A-Frame a redimensionar el canvas
-            APP.a-scene.resize(); 
-            
-            // Intenta recuperar el sistema de MindAR para actualizar el motor de la cámara
-            const mindarSystem = APP.a-scene.systems["mindar-image-system"];
-            if (mindarSystem && mindarSystem.resize) {
-                mindarSystem.resize();
-            }
-        }
-    }, 300);
-});
 
+
+<script>
+AFRAME.registerComponent('mindar-orientation-fix', {
+  init: function () {
+    this.scene = this.el;
+    this.timer = null;
+    this.handleOrientation = this.handleOrientation.bind(this);
+
+    window.addEventListener(
+      'orientationchange',
+      this.handleOrientation
+    );
+  },
+
+  handleOrientation: function () {
+    clearTimeout(this.timer);
+
+    this.timer = setTimeout(async () => {
+      const system =
+        this.scene.systems['mindar-image-system'];
+
+      if (!system) {
+        console.warn('No se encontró el sistema MindAR');
+        return;
+      }
+
+      try {
+        await system.stop();
+
+        // Espera a que el dispositivo termine de girar
+        await new Promise(resolve =>
+          setTimeout(resolve, 500)
+        );
+
+        await system.start();
+
+        console.log('MindAR reiniciado tras girar');
+      } catch (error) {
+        console.error(
+          'Error al reiniciar MindAR:',
+          error
+        );
+      }
+    }, 500);
+  },
+
+  remove: function () {
+    clearTimeout(this.timer);
+
+    window.removeEventListener(
+      'orientationchange',
+      this.handleOrientation
+    );
+  }
+});
 </script>
+
+
+
 
 
 
@@ -142,6 +184,7 @@ window.addEventListener("orientationchange", () => {
 
 <a-scene 
     mindar-image="imageTargetSrc: ./targets/targets.mind;" 
+    mindar-orientation-fix
     filterMinCF: 0.001; filterBeta: 0.001;
     device-orientation-permission-ui="enabled: false"
 > 
