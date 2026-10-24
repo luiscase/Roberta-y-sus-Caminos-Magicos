@@ -185,7 +185,7 @@ AFRAME.registerComponent('mindar-orientation-fix', {
 <a-scene 
     mindar-image="imageTargetSrc: ./targets/targets.mind;" 
     mindar-orientation-fix
-    filterMinCF: 0.001; filterBeta: 0.001;
+    filterMinCF: 0.001; filterBeta: 1000;
     device-orientation-permission-ui="enabled: false"
 > 
 
@@ -206,11 +206,11 @@ AFRAME.registerComponent('mindar-orientation-fix', {
 </a-entity>
 
 <a-entity video-controller02="" mindar-image-target="targetIndex: 1"> 
-    <a-video src="#Video02" width="1.6" height="0.9" scale="1.3 1.2 1.2" rotation="" position="0.4 0 0" material="side: front" geometry=""></a-video> 
+    <a-video src="#Video02" width="1.6" height="0.9" scale="1.3 1.2 1.2" rotation="" position="0.5 0 0" material="side: front" geometry=""></a-video> 
 </a-entity>
 
 <a-entity video-controller02="" mindar-image-target="targetIndex: 2"> 
-    <a-video src="#Video02" width="1.6" height="0.9" scale="1.3 1.2 1.2" rotation="" position="-0.4 0 0" material="side: front" geometry=""></a-video> 
+    <a-video src="#Video02" width="1.6" height="0.9" scale="1.3 1.2 1.2" rotation="" position="-0.5 0 0" material="side: front" geometry=""></a-video> 
 </a-entity>
 
 
