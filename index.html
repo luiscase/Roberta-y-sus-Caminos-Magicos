@@ -53,6 +53,22 @@ AFRAME.registerComponent('video-controller02', {
 
 
 <style>
+
+html, body {
+  position: relative;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* Evita barras de desplazamiento al rotar */
+}
+
+/* Contenedor de la escena AR */
+a-scene {
+  width: 100%;
+  height: 100%;
+}
+
+
         /* Estilos para la ventana de inicio */
         #splash-screen {
             position: fixed;
@@ -100,6 +116,8 @@ AFRAME.registerComponent('video-controller02', {
         }
     </style>
 
+
+
            
     </head> 
     <body> 
@@ -118,7 +136,7 @@ AFRAME.registerComponent('video-controller02', {
 <a-scene 
     mindar-image="imageTargetSrc: ./targets/targets.mind;" 
     filterMinCF: 0.0001; filterBeta: 0.1000;
-    device-orientation-permission-ui="enabled: true"
+    device-orientation-permission-ui="enabled: false"
 > 
 
     
