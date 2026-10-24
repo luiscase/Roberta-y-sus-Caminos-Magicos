@@ -47,26 +47,33 @@ AFRAME.registerComponent('video-controller02', {
 });
 </script>
 
+<script>
+window.addEventListener("orientationchange", () => {
+    // Pequeño delay para dejar que el navegador termine de rotar el Viewport
+    setTimeout(() => {
+        if (APP && APP.a-scene) {
+            // Fuerza a A-Frame a redimensionar el canvas
+            APP.a-scene.resize(); 
+            
+            // Intenta recuperar el sistema de MindAR para actualizar el motor de la cámara
+            const mindarSystem = APP.a-scene.systems["mindar-image-system"];
+            if (mindarSystem && mindarSystem.resize) {
+                mindarSystem.resize();
+            }
+        }
+    }, 300);
+});
+
+</script>
+
+
+
 
 
 
 
 
 <style>
-
-html, body {
-  position: relative;
-  margin: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden; /* Evita barras de desplazamiento al rotar */
-}
-
-/* Contenedor de la escena AR */
-a-scene {
-  width: 100%;
-  height: 100%;
-}
 
 
         /* Estilos para la ventana de inicio */
