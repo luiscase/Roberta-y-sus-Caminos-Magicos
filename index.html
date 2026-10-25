@@ -227,6 +227,25 @@ AFRAME.registerComponent('mindar-orientation-fix', {
         scene.pause();
 
         startButton.addEventListener('click', () => {
+
+ // Solicitar pantalla completa
+    try {
+      const elemento = document.documentElement;
+
+      if (elemento.requestFullscreen) {
+        await elemento.requestFullscreen();
+      } else if (elemento.webkitRequestFullscreen) {
+        // Compatibilidad con algunos navegadores
+        elemento.webkitRequestFullscreen();
+      }
+    } catch (error) {
+      console.log(
+        'No se pudo activar pantalla completa:',
+        error
+      );
+
+
+
             // 1. Reanudar la escena de A-Frame (activa cámara/sensores)
             scene.play();
 
