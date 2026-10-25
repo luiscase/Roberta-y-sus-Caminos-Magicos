@@ -220,52 +220,32 @@ AFRAME.registerComponent('mindar-orientation-fix', {
 <!-- 3. JAVASCRIPT PARA CONTROLAR LA INTERFAZ -->
  
 <script>
-    const splash = document.getElementById('splash-screen');
-    const startButton = document.getElementById('start-button');
-    const scene = document.querySelector('a-scene');
+        const splash = document.getElementById('splash-screen');
+        const startButton = document.getElementById('start-button');
+        const scene = document.querySelector('a-scene');
 
-    // Pausar la escena al cargar la página
-    scene.pause();
+        // Pausar la escena al cargar la página para ahorrar recursos antes del click
+        scene.pause();
 
-    startButton.addEventListener('click', async () => {
+        startButton.addEventListener('click', () => {
 
-        // 1. Activar pantalla completa
-        try {
-            const docElement = document.documentElement;
 
-            if (docElement.requestFullscreen) {
-                await docElement.requestFullscreen();
-            } else if (docElement.webkitRequestFullscreen) {
-                // Compatibilidad con algunos navegadores
-                docElement.webkitRequestFullscreen();
-            }
-        } catch (error) {
-            console.warn(
-                'No se pudo activar pantalla completa:',
-                error
-            );
-        }
+            // 1. Reanudar la escena de A-Frame (activa cámara/sensores)
+            scene.play();
 
-        // 2. Reanudar la escena de A-Frame
-        scene.play();
+            // 2. Desvanecer la pantalla de inicio
+            splash.style.opacity = 0;
 
-        // 3. Desvanecer la pantalla de inicio
-        splash.style.opacity = 0;
-
-        // 4. Eliminar la pantalla de inicio después de la animación
-        setTimeout(() => {
-            splash.remove();
-
-            // Mostrar el botón nativo de AR/VR si lo necesitas
-            const vrButton = document.querySelector('.a-enter-vr');
-
-            if (vrButton) {
-                vrButton.style.display = 'block';
-            }
-        }, 500);
-
-    });
-</script>
+            // 3. Eliminar por completo el div del DOM después de la animación para que no interfiera con los clicks en AR
+            setTimeout(() => {
+                splash.remove();
+                
+                // Volver a mostrar el botón nativo de entrar a VR/AR si lo necesitas
+                const vrButton = document.querySelector('.a-enter-vr');
+                if (vrButton) vrButton.style.display = 'block';
+            }, 500); 
+        });
+    </script>
 
 
 
