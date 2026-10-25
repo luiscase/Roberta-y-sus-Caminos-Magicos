@@ -218,50 +218,55 @@ AFRAME.registerComponent('mindar-orientation-fix', {
 </a-scene> 
 
 <!-- 3. JAVASCRIPT PARA CONTROLAR LA INTERFAZ -->
-    <script>
-        const splash = document.getElementById('splash-screen');
-        const startButton = document.getElementById('start-button');
-        const scene = document.querySelector('a-scene');
+ 
+<script>
+    const splash = document.getElementById('splash-screen');
+    const startButton = document.getElementById('start-button');
+    const scene = document.querySelector('a-scene');
 
-        // Pausar la escena al cargar la página para ahorrar recursos antes del click
-        scene.pause();
+    // Pausar la escena al cargar la página
+    scene.pause();
 
-        startButton.addEventListener('click', () => {
+    startButton.addEventListener('click', async () => {
 
- // Solicitar pantalla completa
-    try {
-      const elemento = document.documentElement;
+        // 1. Activar pantalla completa
+        try {
+            const docElement = document.documentElement;
 
-      if (elemento.requestFullscreen) {
-        await elemento.requestFullscreen();
-      } else if (elemento.webkitRequestFullscreen) {
-        // Compatibilidad con algunos navegadores
-        elemento.webkitRequestFullscreen();
-      }
-    } catch (error) {
-      console.log(
-        'No se pudo activar pantalla completa:',
-        error
-      );
+            if (docElement.requestFullscreen) {
+                await docElement.requestFullscreen();
+            } else if (docElement.webkitRequestFullscreen) {
+                // Compatibilidad con algunos navegadores
+                docElement.webkitRequestFullscreen();
+            }
+        } catch (error) {
+            console.warn(
+                'No se pudo activar pantalla completa:',
+                error
+            );
+        }
 
+        // 2. Reanudar la escena de A-Frame
+        scene.play();
 
+        // 3. Desvanecer la pantalla de inicio
+        splash.style.opacity = 0;
 
-            // 1. Reanudar la escena de A-Frame (activa cámara/sensores)
-            scene.play();
+        // 4. Eliminar la pantalla de inicio después de la animación
+        setTimeout(() => {
+            splash.remove();
 
-            // 2. Desvanecer la pantalla de inicio
-            splash.style.opacity = 0;
+            // Mostrar el botón nativo de AR/VR si lo necesitas
+            const vrButton = document.querySelector('.a-enter-vr');
 
-            // 3. Eliminar por completo el div del DOM después de la animación para que no interfiera con los clicks en AR
-            setTimeout(() => {
-                splash.remove();
-                
-                // Volver a mostrar el botón nativo de entrar a VR/AR si lo necesitas
-                const vrButton = document.querySelector('.a-enter-vr');
-                if (vrButton) vrButton.style.display = 'block';
-            }, 500); 
-        });
-    </script>
+            if (vrButton) {
+                vrButton.style.display = 'block';
+            }
+        }, 500);
+
+    });
+</script>
+
 
 
 </body> 
